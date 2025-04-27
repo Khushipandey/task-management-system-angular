@@ -1,6 +1,23 @@
 <div class="p-6">
   <app-summary></app-summary>
+
+  <!-- Filters -->
+  <div class="flex flex-wrap gap-4 my-6 items-center">
+    <select [(ngModel)]="filterStatus" (change)="onFilterChange()" class="border rounded p-2">
+      <option value="All">All</option>
+      <option value="Pending">Pending</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+    </select>
+
+    <select [(ngModel)]="sortOrder" (change)="onFilterChange()" class="border rounded p-2">
+      <option value="asc">Due Date: Oldest First</option>
+      <option value="desc">Due Date: Newest First</option>
+    </select>
+  </div>
+
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-    <app-task-card *ngFor="let task of taskList" [task]="task"></app-task-card>
+    <app-task-card *ngFor="let task of filteredTaskList" [task]="task"></app-task-card>
   </div>
 </div>
