@@ -1,0 +1,68 @@
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-lg p-6 w-full max-w-md">
+    <h2 class="text-xl font-bold mb-4">Add Task</h2>
+
+    <form (ngSubmit)="submit()">
+      <div class="mb-4">
+        <label class="block mb-1 font-semibold">Title</label>
+        <input
+          [(ngModel)]="title"
+          name="title"
+          class="w-full border rounded px-3 py-2"
+          required
+        />
+      </div>
+
+      <div class="mb-4">
+        <label class="block mb-1 font-semibold">Description</label>
+        <textarea
+          [(ngModel)]="description"
+          name="description"
+          class="w-full border rounded px-3 py-2"
+        ></textarea>
+      </div>
+
+      <div class="mb-4">
+        <label class="block mb-1 font-semibold">Due Date</label>
+        <input
+          type="date"
+          [(ngModel)]="dueDate"
+          name="dueDate"
+          class="w-full border rounded px-3 py-2"
+          required
+        />
+      </div>
+
+      <div class="mb-4">
+        <label class="block mb-1 font-semibold">Status</label>
+        <select
+          [(ngModel)]="status"
+          name="status"
+          class="w-full border rounded px-3 py-2"
+        >
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+
+      <div class="flex justify-end gap-4">
+        <button
+          type="button"
+          (click)="close.emit()"
+          class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
