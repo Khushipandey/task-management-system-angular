@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from "@angular/core";
-import { provideRouter } from "@angular/router";
+import { provideRouter, withHashLocation } from "@angular/router";
 import { routes } from "./app.routes";
 import { HttpClientModule } from "@angular/common/http";
 import { NgBusyModule } from "ng-busy";
@@ -9,7 +9,7 @@ import { InMemoryDataService } from "./core/in-memory-data.service";
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes, withHashLocation()),
     provideAnimations(),
     importProvidersFrom(
       HttpClientModule,
