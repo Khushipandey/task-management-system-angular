@@ -23,7 +23,7 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 3,
         title: "Task Three",
         description: "Third task",
-        status: "Compleated",
+        status: "Completed",
         dueDate: "2025-05-021",
       },
       {

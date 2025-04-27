@@ -10,32 +10,31 @@ import { TaskFormComponent } from "../task-form/task-form.component";
   imports: [CommonModule, TaskFormComponent],
   template: `
     <div
-      class="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between"
+      class="bg-white rounded-2xl p-5 shadow-lg hover:shadow-xl transition duration-300 flex flex-col justify-between min-h-[180px]"
     >
       <div>
-        <h3 class="text-lg font-bold">{{ task.title }}</h3>
-        <p class="text-sm text-gray-600">{{ task.description }}</p>
-        <p class="text-xs text-gray-400 mt-2">Due: {{ task.dueDate }}</p>
-        <span
-          class="inline-block mt-2 px-2 py-1 text-xs rounded bg-indigo-100 text-indigo-600"
-        >
-          {{ task.status }}
-        </span>
+        <h2 class="text-xl font-semibold text-gray-800">{{ task.title }}</h2>
+        <p class="text-sm text-gray-500 mt-2">{{ task.description }}</p>
       </div>
 
-      <div class="flex justify-end gap-2 mt-4">
-        <button
-          (click)="editTask()"
-          class="text-blue-500 hover:text-red-700 text-sm"
+      <div class="flex items-center justify-between mt-4">
+        <span
+          class="text-xs font-medium px-3 py-1 rounded-full"
+          [ngClass]="getCssClassForStatus()"
+          >{{ task.status }}</span
         >
-          Edit
-        </button>
-        <button
-          (click)="deleteTask()"
-          class="text-red-500 hover:text-red-700 text-sm"
-        >
-          Delete
-        </button>
+        <div class="flex gap-2">
+          <button class="text-blue-600 hover:text-blue-800 text-sm" (click)="editTask()">
+            Edit
+          </button>
+          <button class="text-red-500 hover:text-red-700 text-sm" (click)="deleteTask">
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <div class="text-xs text-gray-400 mt-2">
+        Due: {{ task.dueDate | date }}
       </div>
     </div>
 
@@ -60,5 +59,11 @@ export class TaskCardComponent {
 
   editTask() {
     this.isModalOpen = true;
+  }
+
+  getCssClassForStatus(): string {
+    if(this.task.status === 'In Progress') return 'bg-blue-100 text-blue-600';
+    if(this.task.status === 'Completed') return 'bg-green-100 text-green-600'
+    return 'bg-purple-100 text-purple-700';
   }
 }

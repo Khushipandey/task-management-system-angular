@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { NgIf } from "@angular/common";
 import { TaskService } from "../../core/task-list.service";
 
@@ -7,37 +7,38 @@ import { TaskService } from "../../core/task-list.service";
   standalone: true,
   imports: [NgIf],
   template: `
-    <div class="bg-white p-4 rounded-lg shadow-md flex justify-around">
-      <div>
-        <span class="font-semibold">Pending:</span> {{ summary.pending }}
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <div class="bg-white p-4 rounded-lg shadow text-center">
+        <div class="text-sm text-gray-500">Pending</div>
+        <div class="text-xl font-bold text-purple-700">{{ pendingCount }}</div>
       </div>
-      <div>
-        <span class="font-semibold">In Progress:</span> {{ summary.inProgress }}
+      <div class="bg-white p-4 rounded-lg shadow text-center">
+        <div class="text-sm text-gray-500">In Progress</div>
+        <div class="text-xl font-bold text-blue-600">{{ inProgressCount }}</div>
       </div>
-      <div>
-        <span class="font-semibold">Completed:</span> {{ summary.completed }}
+      <div class="bg-white p-4 rounded-lg shadow text-center">
+        <div class="text-sm text-gray-500">Completed</div>
+        <div class="text-xl font-bold text-green-600">{{ completedCount }}</div>
       </div>
     </div>
   `,
 })
-export class SummaryComponent {
-  protected summary: any = {
-    pending: 0,
-    inProgress: 0,
-    completed: 0,
-  };
+export class SummaryComponent implements OnInit {
+  pendingCount: number = 0;
+  inProgressCount: number = 0;
+  completedCount: number = 0;
 
   constructor(private taskService: TaskService) {}
 
   ngOnInit() {
     this.taskService.getTasks().then((taskList) => {
-      this.summary["pending"] = taskList.filter(
+      this.pendingCount = taskList.filter(
         (t) => t.status === "Pending"
       ).length;
-      this.summary["inProgress"] = taskList.filter(
+      this.inProgressCount = taskList.filter(
         (t) => t.status === "In Progress"
       ).length;
-      this.summary["completed"] = taskList.filter(
+      this.completedCount = taskList.filter(
         (t) => t.status === "Completed"
       ).length;
     });
