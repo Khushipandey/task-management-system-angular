@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [RouterModule, HeaderComponent],
+  template: `
+    <div class="min-h-screen bg-gray-100">
+      <app-header></app-header>
+      <router-outlet></router-outlet>
+    </div>
+  `
 })
-export class AppComponent {
-  title = 'task-management-system-ang';
-}
+export class AppComponent {}
