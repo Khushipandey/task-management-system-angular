@@ -14,7 +14,7 @@ export class CompletedTasksComponent {
   constructor(private taskService: TaskService) {}
 
   ngOnInit() {
-    this.taskService.getTasks().subscribe((taskList) => {
+    this.taskService.getTasks().then((taskList) => {
       this.taskList = taskList.filter((task) => task.status === "Compleated");
     });
   }

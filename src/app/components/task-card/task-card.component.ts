@@ -1,13 +1,13 @@
-// app/components/task-card.component.ts
 import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { Task } from "../../models/task.model";
 import { TaskService } from "../../core/task-list.service";
-import { Task } from "../../features/task/task.model";
+import { TaskFormComponent } from "../task-form/task-form.component";
 
 @Component({
   selector: "app-task-card",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TaskFormComponent],
   template: `
     <div
       class="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between"
@@ -25,6 +25,12 @@ import { Task } from "../../features/task/task.model";
 
       <div class="flex justify-end gap-2 mt-4">
         <button
+          (click)="editTask()"
+          class="text-blue-500 hover:text-red-700 text-sm"
+        >
+          Edit
+        </button>
+        <button
           (click)="deleteTask()"
           class="text-red-500 hover:text-red-700 text-sm"
         >
@@ -32,14 +38,27 @@ import { Task } from "../../features/task/task.model";
         </button>
       </div>
     </div>
+
+    <app-task-form
+      *ngIf="isModalOpen"
+      (close)="isModalOpen = false"
+      [task]="task"
+    />
   `,
 })
 export class TaskCardComponent {
   @Input() task!: Task;
+  protected isModalOpen: boolean = false;
 
   constructor(private taskService: TaskService) {}
 
   deleteTask() {
-    this.taskService.deleteTask(this.task.id);
+    this.taskService.deleteTask(this.task.id).then(() => {
+      this.taskService.refrestTaskListSubject.next();
+    });
+  }
+
+  editTask() {
+    this.isModalOpen = true;
   }
 }

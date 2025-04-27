@@ -1,7 +1,14 @@
-import { Component, EventEmitter, Output } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { v4 as uuidv4 } from "uuid";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import { FormsModule, NgForm } from "@angular/forms";
 import { CommonModule } from "@angular/common";
+import { v4 as uuidv4 } from "uuid";
+import { Task } from "../../models/task.model";
 import { TaskService } from "../../core/task-list.service";
 
 @Component({
@@ -11,24 +18,40 @@ import { TaskService } from "../../core/task-list.service";
   templateUrl: "./task-form.component.html",
 })
 export class TaskFormComponent {
+  @Input() task?: Task;
   @Output() close = new EventEmitter<void>();
+  @ViewChild("myForm") myForm!: NgForm;
 
-  title = "";
-  description = "";
-  dueDate = "";
-  status = "Pending";
+  title: string = "";
+  description: string | undefined = "";
+  dueDate: string = "";
+  status: string = "";
 
   constructor(private taskService: TaskService) {}
 
+  ngOnInit() {
+    if (this.task) {
+      this.title = this.task.title;
+      this.description = this.task.description;
+      this.dueDate = this.task.dueDate;
+      this.status = this.task.status;
+    }
+  }
+
   submit() {
-    if (this.title && this.dueDate) {
-      this.taskService.addTask({
-        id: +uuidv4(),
+    if (this.myForm.valid) {
+      const request = {
+        id: this.task ? this.task.id : +uuidv4(),
         title: this.title,
         description: this.description,
         dueDate: this.dueDate,
         status: this.status,
-      });
+      };
+
+      const promise = this.task
+        ? this.taskService.updateTask(request)
+        : this.taskService.addTask(request);
+      promise.then(() => this.taskService.refrestTaskListSubject.next());
       this.close.emit();
     }
   }
