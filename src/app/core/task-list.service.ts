@@ -7,7 +7,6 @@ import { Task } from "../models/task.model";
 export class TaskService {
   private apiUrl = "api/tasks";
   refrestTaskListSubject = new Subject<void>();
-  taskToEditSource = new Subject<Task | null>();
 
   constructor(private http: HttpClient) {}
 

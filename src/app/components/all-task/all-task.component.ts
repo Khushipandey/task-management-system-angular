@@ -1,24 +1,27 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 import { Subscription } from "rxjs";
+import { NgBusyModule } from "ng-busy";
 import { TaskService } from "../../core/task-list.service";
+import { Task } from "../../models/task.model";
 import { TaskCardComponent } from "../task-card/task-card.component";
 import { SummaryComponent } from "../summary/summary.component";
-import { FormsModule } from "@angular/forms";
-import { Task } from "../../models/task.model";
 
 @Component({
   selector: "app-all-tasks",
   standalone: true,
-  imports: [CommonModule, FormsModule, TaskCardComponent, SummaryComponent],
+  imports: [CommonModule, FormsModule, TaskCardComponent, SummaryComponent, NgBusyModule],
   templateUrl: "./all-task.component.html",
 })
-export class AllTasksComponent {
+export class AllTasksComponent implements OnInit, OnDestroy {
   protected taskList: Task[] = [];
   protected filteredTaskList: Task[] = [];
 
   protected filterStatus: string = 'All';
   protected sortOrder: string = 'asc';
+
+  protected busy: Promise<any>[]= [];
 
   private subscription!: Subscription;
 
@@ -30,12 +33,14 @@ export class AllTasksComponent {
   }
 
   getTaskList() {
-    this.taskService.getTasks().then((tasks) => {
+    const promise = this.taskService.getTasks().then((tasks) => {
       this.taskList = tasks;
       this.filterStatus = 'All';
       this.sortOrder = 'asc';
       this.onFilterChange();
     });
+
+    this.busy.push(promise);
   }
 
   subscribeEditTaskEvent() {
